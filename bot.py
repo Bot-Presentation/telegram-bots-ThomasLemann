@@ -6,7 +6,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 
 # TODO 1: add token and name
 TOKEN = "8898643816:AAFk3u2DwaKBQ3Fd429SthgBcOAH9lNGwLY"
-NAME = "Chuchundrik"
+NAME = "MyChupakabrik_bot"
 
 # Add a user to the list of known users in the group chat
 async def register_member(username: str, context: ContextTypes.DEFAULT_TYPE):
