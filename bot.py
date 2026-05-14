@@ -5,14 +5,17 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 
 
 # TODO 1: add token and name
-TOKEN = ""
-NAME = ""
+TOKEN = "8898643816:AAFk3u2DwaKBQ3Fd429SthgBcOAH9lNGwLY"
+NAME = "Chuchundrik"
 
 # Add a user to the list of known users in the group chat
 async def register_member(username: str, context: ContextTypes.DEFAULT_TYPE):
     # TODO 2: initialize an empty set of registered members in context if it doesn't exist yet
+    if "members" not in context.bot_data:
+        context.bot_data["members"] = set()
     if username != NAME:
         # TODO 3: add the username to the set in context
+        context.bot_data["members"].add(username)
         pass
 
 # Greet a random user in the group chat
@@ -36,13 +39,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await register_member(update.effective_user.username, context)
     if NAME in update.message.text:
         # TODO 4: reply with a greeting message
+        await update.message.reply_text("Hello, chuchundriks!")
         await asyncio.sleep(10)
         # TODO 5: greet a random other user (by calling send_to_random() with the chat ID and the set of users stored in context)
+        members = context.bot_data.get("members", set())
+        await send_to_random(update.effective_chat.id, members)
         pass
 
 app = Application.builder().token(TOKEN).build()
 
 # TODO 6: register the start_command() handler for the /start command
+app.add_handler(CommandHandler("start", start_command))
 app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, handle_member_update))
 # TODO 7: register the handle_message() handler for all messages except commands
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.run_polling(allowed_updates=Update.ALL_TYPES)
